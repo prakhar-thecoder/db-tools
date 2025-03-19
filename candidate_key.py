@@ -69,11 +69,13 @@ def find_ck(r, fd):
 if __name__ == '__main__':
     r = {"A", "B", "C", "D", "E", 'H'}
     fd = [
-        ("A", "B"),
+        ("A", "D"),
+        ("C", "B"),
+        ("E", "A"),
+        ("E", "D"),
+        ("BC", "A"),
         ("BC", "D"),
-        ("E", "C"),
-        ("D", "A")
     ]
-    attr = "B"
+    attr = "C"
     
-    print(find_ck(r, fd))
+    print(find_closure(fd, attr))
