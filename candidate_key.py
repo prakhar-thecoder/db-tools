@@ -17,21 +17,23 @@ def find_closure(fd, attr):
 
 def prepare_lmr_matrix(r, fd):
     lmr = {"l": set(), "m": set(), "r": set()}
+    
     for lhs, rhs in fd:
-        if lhs not in lmr["m"]:
-            lmr["l"].update(lhs)
-        if rhs not in lmr["m"]:
-            lmr["r"].update(rhs)
-        
-        if lhs in lmr["r"]:
-            lmr["l"].remove(lhs)
-            lmr["r"].remove(lhs)
-            lmr["m"].update(lhs)
-        if rhs in lmr["l"]:
-            lmr["l"].remove(rhs)
-            lmr["r"].remove(rhs)
-            lmr["m"].update(rhs)
-        
+        lmr["l"].update(lhs)
+        lmr["r"].update(rhs)
+    
+    for lhs, rhs in fd:
+        for attr in lhs:
+            if attr in lmr["r"]:
+                lmr["m"].add(attr)
+                lmr["l"].discard(attr)
+                lmr["r"].discard(attr)
+        for attr in rhs:
+            if attr in lmr["l"]:
+                lmr["m"].add(attr)
+                lmr["l"].discard(attr)
+                lmr["r"].discard(attr)
+    
     lmr["l"] = sorted(lmr["l"])
     lmr["m"] = sorted(lmr["m"])
     lmr["r"] = sorted(lmr["r"])
@@ -67,15 +69,14 @@ def find_ck(r, fd):
 
 
 if __name__ == '__main__':
-    r = {"A", "B", "C", "D", "E", 'H'}
+    r = {"A", "B", "C", "D", "E", 'P', "G"}
     fd = [
-        ("A", "D"),
-        ("C", "B"),
-        ("E", "A"),
-        ("E", "D"),
-        ("BC", "A"),
-        ("BC", "D"),
+        ("AB", "CD"),
+        ("DE", "P"),
+        ("C", "E"),
+        ("P", "C"),
+        ("B", "G"),
     ]
     attr = "C"
     
-    print(find_closure(fd, attr))
+    print(find_ck(r, fd))
