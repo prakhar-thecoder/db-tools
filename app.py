@@ -3,6 +3,8 @@ from minimal_cover import find_minimal_cover
 from candidate_key import find_ck, find_closure
 
 app = Flask(__name__)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+
 
 @app.route("/")
 def index():
@@ -43,6 +45,33 @@ def ck_can():
         }
 
     return render_template("ck_can.html", result=result)
+
+@app.route('/attribute-closure', methods=["GET", "POST"])
+def attribute_closure():
+    result = {}
+
+    if request.method == "POST":
+        fds_raw = request.form["fds"].split("\n")
+        
+        fds = []
+        for fd in fds_raw:
+            if "->" in fd:
+                lhs, rhs = fd.split("->")
+                lhs = lhs.strip()
+                rhs = rhs.strip()
+                fds.append((lhs, rhs))
+        
+        closure_attr = request.form.get("closure_attr", "")
+        closure_result = ", ".join(sorted(find_closure(fds, closure_attr)))
+        
+        result = {
+            "attr": closure_attr,
+            "closure": "{ " + closure_result + " }",
+            "fds": fds
+        }
+
+    return render_template("attribute_closure.html", result=result)
+
 
 
 if __name__ == "__main__":
