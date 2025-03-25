@@ -3,7 +3,7 @@
 {% block content %}
 <div class = "bg-gray-100 min-h-screen flex flex-col items-center justify-center bg-cover bg-center space-y-10">
     <div class="bg-white shadow-lg rounded-lg p-8 max-w-2xl w-full mt-5">
-        <h2 class="text-2xl font-bold text-center text-blue-600 mb-4">Candidate key finder</h2>
+        <h2 class="text-2xl font-bold text-center text-blue-600 mb-4">Minimal cover Finder</h2>
     
         <form method="POST" class="space-y-4">
             <div>
@@ -18,15 +18,16 @@
                           class="w-full mt-1 p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"></textarea>
             </div>
     
+    
             <button type="submit" 
                     class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition">
-                Find
+                Find Minimal Cover
             </button>
         </form>
     
         {% if result %}
             <div class="mt-6 p-4 bg-gray-50 rounded-lg shadow">
-                <h1 class="text-xl text-center font-semibold text-gray-800">Results</h1>
+                <h3 class="text-xl text-center font-semibold text-gray-800">Results</h3>
                 <p class="mt-2"><strong class="text-blue-600">Attributes:</strong> {{ result['attributes'] }}</p>
                 
                 <div class="flex my-2 gap-5">
@@ -40,29 +41,27 @@
                     </div>
                 </div>
 
-                <p class="mt-2"><strong class="text-blue-600">Candidate Keys:</strong> {{ result['candidate_keys'] }}</p>
-                
+                <div class="flex my-2 gap-5">
+                    <p class="">
+                        <strong class="text-blue-600">Functional Dependencies:</strong>
+                    </p>
+                    <div>
+                        {% for lhs, rhs in result['minimal_cover'] %}
+                        <p class="my-0">{{ lhs }} &rarr; {{ rhs }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         {% endif %}
     </div>
     <div class="bg-white bg-opacity-70 p-8 rounded-xl shadow-lg backdrop-blur-md  animate-fadeIn delay-200">
-        <h2 class="text-4xl font-bold text-gray-900 mb-4 text-center">What is candidate key ?</h2>
-        <p class="text-xl text-gray-700 mt-5 text-left">
-            A candidate key is a minimal set of attributes that uniquely identifies each tuple within a table. In other words, there should not be any two rows in a table that can have the same values for the columns that are the part of candidate key.
-        </p>
-        <ul class="text-xl text-gray-700 mt-5 text-left list-disc pl-10">
-            <li>A candidate key has unique values for every row in a table.</li>
-            <li>Every candidate key is a super key, but not all super keys qualify as candidate keys. Simply put, a candidate key is a minimal super key.</li>
-            <li>A candidate key can contain null values, but this depends on the database’s design and constraints.</li>
-            <li>It should not have redundant attributes, meaning it must be as simple as possible to uniquely identify a row.
-            </li>
-        </ul>
-        
       
-        <div class = "max-w-screen-lg mx-auto pb-10 flex justify-center">
-            <img src ={{ url_for('static', filename='Candidate-key.png') }} class ="object-center bg-opacity-70 p-8 rounded-xl shadow-lg w-lg">
-        </div>
-                   
+        <h2 class="text-4xl font-bold text-gray-900 mb-4 text-center">What is cannonical cover ?</h2>
+        <ul class="text-xl text-gray-700 mt-5 text-left list-disc pl-10">
+            <li>A canonical cover is a set of functional dependencies that is equivalent to a given set of functional dependencies but is minimal in terms of the number of dependencies. </li>
+            <li>Canonical Cover of functional dependency is also called minimal set of functional dependency or irreducible form of functional dependency. </li>
+            
+        </ul>             
        
     </div>
 </div>

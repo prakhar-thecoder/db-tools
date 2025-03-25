@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-gray-100 min-h-screen flex flex-col items-center justify-center space-y-10 p-6">
+    <div class="bg-white shadow-xl rounded-2xl p-8 max-w-2xl w-full">
+        <h2 class="text-3xl font-bold text-center text-blue-700 mb-6">
+            Normalization Checker
+        </h2>
+
+        <form method="POST" class="space-y-6">
+            <div>
+                <label class="block text-gray-700 font-semibold mb-1">Attributes (Comma Separated):</label>
+                <input type="text" name="attributes" required placeholder="A, B, C, D"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
+            </div>
+
+            <div>
+                <label class="block text-gray-700 font-semibold mb-1">Functional Dependencies (One per line, use '->'
+                    notation):</label>
+                <textarea name="fds" required placeholder="A -> BC"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition h-32 resize-none"></textarea>
+            </div>
+
+            <button type="submit"
+                class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition shadow-md">
+                Check Normalization
+            </button>
+        </form>
+
+        {% if result %}
+        <div class="mt-8 p-6 bg-gray-50 rounded-xl shadow-md border border-gray-200">
+            <h1 class="text-xl text-center font-semibold text-gray-800">Results</h1>
+
+            <p class="mt-2">
+                <strong class="text-blue-600">Attributes: </strong>
+                {{ result['attributes'] }}
+            </p>
+
+            <div class="flex my-2 gap-5">
+                <p class="">
+                    <strong class="text-blue-600">Functional Dependencies:</strong>
+                </p>
+                <div>
+                    {% for lhs, rhs in result['fds'] %}
+                    <p class="my-0">{{ lhs }} &rarr; {{ rhs }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="mt-5">
+                <strong>
+                    <p class="text-center text-blue-600">Results for 2NF</p>
+                </strong>
+                <p class="mt-2"><strong class="text-blue-600">Candidate Keys:</strong> {{ result['result_2nf']['ck'] }}
+                </p>
+                <p class="mt-2"><strong class="text-blue-600">Non-Prime Attributes:</strong> {{
+                    result['result_2nf']['np'] }}</p>
+
+                {% if result['2nf'] %}
+                <p class="mt-2 text-green-600 font-semibold">The given relation is in 2NF.</p>
+                {% else %}
+                <p class="mt-2 text-red-600 font-semibold">The given relation is not in 2NF.</p>
+                <p class="mt-2"><strong class="text-blue-600">Violating FDs:</strong></p>
+                
+                <div class="flex my-2 gap-5">
+                    <p class="">
+                        <strong class="text-red-600">Violating FDs:</strong>
+                    </p>
+                    <div>
+                        {% for lhs, rhs in result['result_2nf']['violating_fds'] %}
+                        <p class="my-0">{{ lhs }} &rarr; {{ rhs }}</p>
+                        {% endfor %}
+                    </div>
+                </div>   
+                {% endif %}
+            </div>
+
+            <div class="mt-5">
+                <strong>
+                    <p class="text-center text-blue-600">Results for 3NF</p>
+                </strong>
+                <p class="mt-2"><strong class="text-blue-600">Candidate Keys:</strong> {{ result['result_3nf']['ck'] }}
+                </p>
+                <p class="mt-2"><strong class="text-blue-600">Non-Prime Attributes:</strong> {{
+                    result['result_3nf']['np'] }}</p>
+
+                {% if result['3nf'] %}
+                <p class="mt-2 text-green-600 font-semibold">The given relation is in 3NF.</p>
+                {% else %}
+                <p class="mt-2 text-red-600 font-semibold">The given relation is not in 3NF.</p>
+
+                <div class="flex my-2 gap-5">
+                    <p class="">
+                        <strong class="text-red-600">Violating FDs:</strong>
+                    </p>
+                    <div>
+                        {% for lhs, rhs in result['result_3nf']['violating_fds'] %}
+                        <p class="my-0">{{ lhs }} &rarr; {{ rhs }}</p>
+                        {% endfor %}
+                    </div>
+                </div>    
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -64,7 +64,7 @@ def find_ck(r, fd):
         if set(find_closure(fd, key)) == set(lmr["l"] + lmr["m"] + lmr["r"]):
             ck.add(key+left)
             length = len(key)
-
+    
     return sorted(ck)
 
 
