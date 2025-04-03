@@ -104,5 +104,24 @@
         </div>
         {% endif %}
     </div>
+    <div class="bg-white bg-opacity-70 p-8 rounded-xl shadow-lg backdrop-blur-md  animate-fadeIn delay-200">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4 text-center">What is Normalization ?</h2>
+        <p class="text-xl text-gray-700 mt-5 text-left">
+            Database normalization is an important process used to organize and structure relational databases. This process ensures that data is stored in a way that minimizes redundancy, simplifies querying, and improves data integrity.
+        </p>
+        <p class="text-xl text-gray-700 mt-5 text-left">
+            <strong>Types of normalization :</strong>
+        </p>
+        <div class = "max-w-screen-lg mx-auto pb-10 flex justify-center">
+            <img src ={{ url_for('static', filename='normalization.png') }} class ="object-center bg-opacity-70 p-8 rounded-xl shadow-lg w-lg">
+        </div>
+        <ul class="text-xl text-gray-700 mt-5 text-left list-disc pl-10">
+            <li><strong>1NF : </strong>This normalization level ensures that each column in your data contains only atomic values. Atomic values in this context means that each entry in a column is indivisible. It is like saying that each cell in a spreadsheet should hold just one piece of information. 1NF ensures atomicity of data, with each column cell containing only a single value and each column having unique names.</li>
+            <li><strong>2NF : </strong>Eliminates partial dependencies by ensuring that non-key attributes depend only on the primary key. What this means, in essence, is that there should be a direct relationship between each column and the primary key, and not between other columns.</li>
+            <li><strong>3NF : </strong>Removes transitive dependencies by ensuring that non-key attributes depend only on the primary key. This level of normalization builds on 2NF.</li>
+            
+        </ul>
+    
+    </div>
 </div>
 {% endblock %}
